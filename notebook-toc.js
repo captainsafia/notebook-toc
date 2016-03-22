@@ -1,6 +1,22 @@
 define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils, $) {
     function create_toc() {
-        console.log('create_toc');
+        var toc_text = "# Table of Contents\n";
+        var cells = Jupyter.notebook.get_cells();
+        var heading_count = 0;
+        for (var i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (cell.cell_type == "markdown") {
+               var cell_content = cell.get_text(); 
+               if (cell_content.startsWith("#")) {
+                   heading_count++;
+                   var last_hash = cell_content.lastIndexOf("#");
+                   var hash_num = last_hash + 1;
+                   var heading_title = cell_content.substr(hash_num);
+                   toc_text += (heading_count + "." + heading_title + "\n");
+               }
+            }
+        }
+        console.log(toc_text);
     }
 
     function place_toc_button() {
