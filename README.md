@@ -9,3 +9,5 @@ scroll to the appropriate fragment when clicked.
 3. Run `jupyter nbextension enable notebook-toc`.
 
 ### Usage Screencast
+
+![Notebook TOC Screencast](notebook-toc-screencast.gif)
