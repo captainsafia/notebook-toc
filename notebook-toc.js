@@ -3,6 +3,7 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
         var toc_text = "# Table of Contents\n";
         var cells = Jupyter.notebook.get_cells();
         var heading_count = 0;
+        var heading_indices = [];
         for (var i = 0; i < cells.length; i++) {
             var cell = cells[i];
             if (cell.cell_type == "markdown") {
@@ -16,7 +17,12 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
                }
             }
         }
-        console.log(toc_text);
+        var toc_cell = Jupyter.notebook.insert_cell_at_index('markdown', 0);
+        toc_cell.set_text(toc_text);
+        toc_cell.render();
+        $(toc_cell.element).on('click', function(event) {
+            Jupyter.notebook.scroll_to_cell(index);
+        });
     }
 
     function place_toc_button() {
