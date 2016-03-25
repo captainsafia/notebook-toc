@@ -16,13 +16,13 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
                    var heading_title = cell_content.substr(hash_num);
                    // Clean up the existing heading content
                    var first_tag = heading_title.indexOf("<");
-                   console.log(first_tag);
-                   heading_title = heading_title.slice(0, first_tag);
+                   if (first_tag != -1) {
+                       heading_title = heading_title.slice(0, first_tag);
+                    }
                    console.log(heading_title);
                    // Create a <a> tag for linking to fragment
                    var link_fragment_heading = heading_title.toLowerCase().replace(" ", "_");
                    var link_fragment = '<a name="' + link_fragment_heading + '"></a>';
-                   console.log(link_fragment);
                    // Append the <a> tag to the heading cell
                    cell.set_text(cell.get_text() +  link_fragment);
                    cell.render();
