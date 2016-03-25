@@ -27,7 +27,7 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
                    cell.set_text(cell.get_text() +  link_fragment);
                    cell.render();
                    // Add the heading to the TOC cell
-                   toc_text += (heading_count + ". ");
+                   toc_text += (Array(hash_num).join('  ') + '- ');
                    toc_text += ("[" + heading_title + "](#" + link_fragment_heading + ") \n");
                }
             }
