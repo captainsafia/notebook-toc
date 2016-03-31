@@ -1,5 +1,5 @@
 define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils, $) {
-    function create_toc() {
+    function create_toc_text() {
         var toc_text = "# Table of Contents\n";
         var cells = Jupyter.notebook.get_cells();
         var heading_count = 0;
@@ -7,7 +7,7 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
             var cell = cells[i];
             if (cell.cell_type == "markdown") {
                var cell_content = cell.get_text(); 
-               if (cell_content.startsWith("#")) {
+               if (cell_content.startsWith("#") & cell_content.indexOf('Table of Contents')) {
                    // Increment the heading count
                    heading_count++;
                    // Get the heading title
@@ -31,10 +31,25 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
                }
             }
         }
+        return toc_text;
+    }
 
-        var toc_cell = Jupyter.notebook.insert_cell_at_index('markdown', 0);
+    function load_toc_cell(toc_cell, toc_text) {
+        if (toc_cell == null) {
+            var toc_cell = Jupyter.notebook.insert_cell_at_index('markdown', 0);
+        }
         toc_cell.set_text(toc_text);
         toc_cell.render();
+    }
+
+    function create_toc() {
+        var toc_text = create_toc_text();
+        load_toc_cell(null, toc_text);
+    }
+
+    function refresh_toc() {
+        var toc_text = create_toc_text();
+        load_toc_cell(Jupyter.notebook.get_cell(0), toc_text);
     }
 
     function place_toc_button() {
@@ -50,6 +65,12 @@ define(['base/js/namespace', 'base/js/utils', 'jquery'], function(Jupyter, utils
                     'icon': 'fa-table',
                     'callback': create_toc,
                     'id': 'create-toc-button'
+                },
+                {
+                    'label': 'Refresh Table of Contents',
+                    'icon': 'fa-refresh',
+                    'callback': refresh_toc,
+                    'id': 'refresh-toc-button'
                 },
             ]);
         }
